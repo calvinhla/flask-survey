@@ -2,13 +2,14 @@ from flask import Flask, session, render_template, flash, redirect, request
 from flask_bcrypt import Bcrypt
 from models import db, connect_db, User, Feedback
 from forms import UserRegistration, UserLogin, FeedbackForm
+import os
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
 app.debug = True
-app.config["SECRET_KEY"] = 'password1'
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql:///authentication'
+app.config["SECRET_KEY"] = os.environ.get('SECRET_KEY', 'password1')
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('DATABASE_URL','postgresql:///authentication')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
 
