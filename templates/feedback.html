@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+    {% block title %}Feedback{% endblock %}
+
+    {% if session.get('user', None) %}
+        {% block userlink %}{{session['user']}}{% endblock %}
+        {% block usertext %}{{session['user']}}{% endblock %}
+    {% endif %}
+
+    {% block content %}
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                {{feedback.title}}
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>{{feedback.content}}</p>
+                    <footer class="blockquote-footer">{{feedback.username}}</footer>
+                </blockquote>
+            </div>
+        </div>
+        {% if session.get('user') == feedback.username %}
+            <form action="/feedback/{{feedback.id}}/delete" method="POST">
+                <button class="btn btn-danger float-right mt-3">Delete</button>
+            </form>
+        {% endif %}
+        
+    </div>
+    {% endblock %}
+

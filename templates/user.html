@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+    {% block title %}Login{% endblock %}
+
+    {% if session.get('user', None) %}
+        {% block userlink %}{{session['user']}}{% endblock %}
+        {% block usertext %}{{session['user']}}{% endblock %}
+    {% endif %}
+
+    {% block content %}
+        <div class="container mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        {% if session['user'] == user.username %}
+                        <form id="delete_user" action="/users/{{user.username}}/delete" method="POST"></form>
+                        <button class="float-right btn btn-small btn-danger" form="delete_user" formmethod="POST">Delete</button>
+                        {% endif %}
+                        <h5 class="card-title">{{user.first_name}} {{user.last_name}}</h5>
+                    </div>
+                    <ul class="card-text list-group list-group-flush">
+                        <li class="list-group-item">{{user.username}}</li>
+                        <li class="list-group-item">{{user.email}}</li>
+                    </ul>
+                    <a class="mt-3 btn btn-primary float-right" href="/users/{{user.username}}/feedback/add">Submit feedback</a>
+                </div>
+            </div>
+            
+            {% if feedback|length > 0 %}
+            <div class="row mt-2">
+                {% for f in feedback %}
+                <div class="col-sm-4 mb-2">
+                    <div class="card">
+                        <div class="card-body">
+                        <h5 class="card-title">
+                        {% if f.content|length > 15 %}
+                            {{f.title[:15]}}...
+                        {% else %}
+                            {{f.title}}
+                        {% endif %}
+                        </h5>
+                        {% if f.content|length > 20 %}
+                            <p class="card-text">{{f.content[:20]}}...</p>
+                        {% else %}
+                            <p class="card-text">{{f.content}}</p>
+                        {% endif %}
+                        <div class="float-right">
+                            {% if session['user'] == user.username %}
+                                <a href="/feedback/{{f.id}}/edit" class="btn btn-primary">Edit</a>
+                            {% endif %}
+                            <a href="/feedback/{{f.id}}" class="btn btn-primary">View</a>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endblock %}

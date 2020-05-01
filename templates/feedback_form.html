@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+    {% block title %}Feedback{% endblock %}
+
+    {% if session.get('user', None) %}
+        {% block userlink %}{{session['user']}}{% endblock %}
+        {% block usertext %}{{session['user']}}{% endblock %}
+    {% endif %}
+
+    {% block content %}
+    <div class="container mt-5">
+        <form method="POST">
+            {{form.hidden_tag()}}
+            
+            <div class="form-group">
+                {{form['title'].label}}
+                {{form['title'](class_="form-control")}}
+            </div>
+            {% if form['title'].errors %}
+                {% for error in form['title'].errors %}
+                    <p class="text-danger">{{error}}</p>
+                {% endfor %}
+            {% endif %}
+            <div class="form-group">
+                {{form['content'].label}}
+                {{form['content'](class_="form-control", rows=8)}}
+            </div>
+
+            <button type="submit" class="btn btn-primary float-right">Submit</button>
+        </form>
+    </div>
+    {% endblock %}
